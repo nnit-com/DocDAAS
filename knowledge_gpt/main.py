@@ -121,11 +121,11 @@ col1, col2, col3 = st.columns(3)
 
 # Display the first image in the first column
 with col1:
-    st.image(image1, caption="WeChat Pay", width=200)
+    st.image(image1, caption="WeChat", width=200)
 
 # Display the second image in the second column
 with col2:
-    st.image(image2, caption="支付宝", width=200)
+    st.image(image2, caption="****", width=200)
 
 # Display the third image in the third column
 with col3:
