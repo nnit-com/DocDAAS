@@ -13,7 +13,9 @@ from langchain.vectorstores.faiss import FAISS
 from openai.error import AuthenticationError
 from pypdf import PdfReader
 
-from knowledge_gpt.embeddings import OpenAIEmbeddings
+# from knowledge_gpt.embeddings import OpenAIEmbeddings
+from langchain.chat_models import AzureChatOpenAI
+from langchain.embeddings.openai import OpenAIEmbeddings
 from knowledge_gpt.prompts import STUFF_PROMPT
 
 
@@ -70,10 +72,20 @@ def text_to_docs(text: str | List[str]) -> List[Document]:
     for doc in page_docs:
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=800,
-            separators=["\n\n", "\n", ".", "!", "?", ",", " ", ""],
+            separators=["\n\n", "\n", ".", "!", "?", ",", " "],
             chunk_overlap=0,
         )
-        chunks = text_splitter.split_text(doc.page_content)
+        # chunks = text_splitter.split_text(doc.page_content)
+        print(f"Processing page {doc.metadata['page']} with content:\n{doc.page_content[:500]}...")  # 只显示前500个字符
+        try:
+            # 调用分割文本的方法
+            chunks = text_splitter.split_text(doc.page_content)
+        except re.error as e:
+            print(f"Regex error when processing page {doc.metadata['page']}: {e}")
+            continue
+        # 输出分割后的块
+        print(f"Page {doc.metadata['page']} split into {len(chunks)} chunks.")
+
         for i, chunk in enumerate(chunks):
             doc = Document(
                 page_content=chunk, metadata={"page": doc.metadata["page"], "chunk": i}
@@ -88,17 +100,30 @@ def text_to_docs(text: str | List[str]) -> List[Document]:
 def embed_docs(docs: List[Document]) -> VectorStore:
     """Embeds a list of Documents and returns a FAISS index"""
 
-    if not st.session_state.get("OPENAI_API_KEY"):
-        raise AuthenticationError(
-            "Enter your OpenAI API key in the sidebar. You can get a key at"
-            " https://platform.openai.com/account/api-keys."
-        )
+    # if not st.session_state.get("OPENAI_API_KEY"):
+    if not st.session_state.get("AZURE_OPENAI_API_KEY"):
+        # raise AuthenticationError(
+        #     "Enter your OpenAI API key in the sidebar. You can get a key at"
+        #     " https://platform.openai.com/account/api-keys."
+        # )
+        pass
     else:
         # Embed the chunks
         embeddings = OpenAIEmbeddings(
-            openai_api_key=st.session_state.get("OPENAI_API_KEY")
+            deployment=st.session_state.get("MODEL_NAME_EMDEDDING_ADA2"),
+            engine=st.session_state.get("MODEL_ENGINE_35"),
+            openai_api_key=st.session_state.get("AZURE_OPENAI_API_KEY"),
+            openai_api_base=st.session_state.get("AZURE_OPENAI_ENDPOINT"),
+            # openai_api_version=st.session_state.get("OPENAI_API_VERSION"),
+            openai_api_type="azure",
+            # chunk_size=16
         )  # type: ignore
+        # embeddings = OpenAIEmbeddings(
+        #     openai_api_key=st.session_state.get("OPENAI_API_KEY")
+        # )  # type: ignore
         index = FAISS.from_documents(docs, embeddings)
+
+        # index = Chroma.from_documents(docs, embeddings)
 
         return index
 
@@ -119,10 +144,17 @@ def get_answer(docs: List[Document], query: str) -> Dict[str, Any]:
 
     # Get the answer
 
+    llm = AzureChatOpenAI(
+        temperature=0,
+        openai_api_type="azure",
+        openai_api_key=st.session_state.get("AZURE_OPENAI_API_KEY"),
+        openai_api_base=st.session_state.get("AZURE_OPENAI_ENDPOINT"),
+        openai_api_version=st.session_state.get("OPENAI_API_VERSION"),
+        deployment_name=st.session_state.get("MODEL_ENGINE_35"),
+        )
+
     chain = load_qa_with_sources_chain(
-        OpenAI(
-            temperature=0, openai_api_key=st.session_state.get("OPENAI_API_KEY")
-        ),  # type: ignore
+        llm,  # type: ignore
         chain_type="stuff",
         prompt=STUFF_PROMPT,
     )
