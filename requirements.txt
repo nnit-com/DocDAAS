@@ -1,12 +1,12 @@
-
+langchian==0.1.14
 streamlit==1.17.0
-
+altair==4.2.0
 cohere==3.2.1
 faiss-cpu==1.7.3
 openai==0.26.2
 docx2txt==0.8
 Pillow==9.4.0
-
+PyPDF2==4.2.0
 tenacity==8.2.0
 python-dotenv==0.21.1
 pytest==7.2.1
