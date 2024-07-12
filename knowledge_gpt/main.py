@@ -1,8 +1,13 @@
+import sys
+sys.path.append('/home/adminsiyu/code/DocDAAS')
+
 import streamlit as st
 from PIL import Image
 import os
-from openai.error import OpenAIError
+# from openai.error import OpenAIError
 
+# from knowledge_gpt.components.sidebar import sidebar
+# from knowledge_gpt.utils import (
 from knowledge_gpt.components.sidebar import sidebar
 from knowledge_gpt.utils import (
     embed_docs,
@@ -58,8 +63,8 @@ if uploaded_file is not None:
         with st.spinner("Indexing document... This may take a while⏳"):
             index = embed_docs(text)
         st.session_state["api_key_configured"] = True
-    except OpenAIError as e:
-        st.error(e._message)
+    except Exception as e:
+        st.error(e)
 
 query = st.text_area("Ask a question about the document 对文件提问题", on_change=clear_submit)
 with st.expander("Advanced Options"):
@@ -83,7 +88,12 @@ if button or st.session_state.get("submit"):
         st.session_state["submit"] = True
         # Output Columns
         answer_col, sources_col = st.columns(2)
+        print(f"=====out-index:{index}=====")
+        print(f"=====out-query:{query}=====")
         sources = search_docs(index, query)
+        print(f"=====out2-sources:{sources}=====")
+        print(f"=====out2-index:{index}=====")
+        print(f"=====out2-query:{query}=====")
 
         try:
             answer = get_answer(sources, query)
@@ -102,14 +112,14 @@ if button or st.session_state.get("submit"):
                     st.markdown(source.metadata["source"])
                     st.markdown("---")
 
-        except OpenAIError as e:
+        except Exception as e:
             st.error(e._message)
 
 
 # Load the images
-image1 = Image.open("knowledge_gpt/wechatqrcode_kyle.jpg")
-image2 = Image.open("knowledge_gpt/zhifubaoqrcode_kyle.jpg")
-image3 = Image.open("knowledge_gpt/paypalqrcode.png")
+image1 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/wechatqrcode_kyle.png")
+image2 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/zhifubaoqrcode_kyle.png")
+image3 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/zhifubaoqrcode_kyle.png")
 
 # Display the image with text on top
 st.write("Each document costs about $1 for OpenAI API call. Please consider pay to keep this service alive! Thank you!")

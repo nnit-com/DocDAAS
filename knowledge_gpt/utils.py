@@ -5,16 +5,15 @@ from typing import Any, Dict, List
 import docx2txt
 import streamlit as st
 from langchain.chains.qa_with_sources import load_qa_with_sources_chain
-from langchain.docstore.document import Document
-from langchain.llms import OpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.vectorstores import VectorStore
-from langchain.vectorstores.faiss import FAISS
-from openai.error import AuthenticationError
 from pypdf import PdfReader
-
-from knowledge_gpt.embeddings import OpenAIEmbeddings
 from knowledge_gpt.prompts import STUFF_PROMPT
+from langchain_openai import AzureOpenAIEmbeddings, AzureChatOpenAI
+from langchain_community.vectorstores import FAISS,Chroma
+from langchain_core import vectorstores
+from langchain_core.documents import Document
+
+
 
 
 @st.experimental_memo()
@@ -85,32 +84,47 @@ def text_to_docs(text: str | List[str]) -> List[Document]:
 
 
 @st.cache(allow_output_mutation=True, show_spinner=False)
-def embed_docs(docs: List[Document]) -> VectorStore:
+def embed_docs(docs: List[Document]) -> vectorstores:
     """Embeds a list of Documents and returns a FAISS index"""
 
-    if not st.session_state.get("OPENAI_API_KEY"):
-        raise AuthenticationError(
-            "Enter your OpenAI API key in the sidebar. You can get a key at"
-            " https://platform.openai.com/account/api-keys."
-        )
+    # if not st.session_state.get("OPENAI_API_KEY"):
+    if not st.session_state.get("AZURE_OPENAI_API_KEY"):
+        # raise AuthenticationError(
+        #     "Enter your OpenAI API key in the sidebar. You can get a key at"
+        #     " https://platform.openai.com/account/api-keys."
+        # )
+        pass
     else:
         # Embed the chunks
-        embeddings = OpenAIEmbeddings(
-            openai_api_key=st.session_state.get("OPENAI_API_KEY")
+        embeddings = AzureOpenAIEmbeddings(
+            openai_api_key=st.session_state.get("AZURE_OPENAI_API_KEY"),
+            azure_endpoint=st.session_state.get("AZURE_OPENAI_ENDPOINT"),
+            openai_api_version=st.session_state.get("OPENAI_API_VERSION"),
+            model=st.session_state.get("MODEL_NAME_EMDEDDING_ADA2"),
         )  # type: ignore
+        # embeddings = OpenAIEmbeddings(
+        #     openai_api_key=st.session_state.get("OPENAI_API_KEY")
+        # )  # type: ignore
         index = FAISS.from_documents(docs, embeddings)
+
+        # index = Chroma.from_documents(docs, embeddings)
 
         return index
 
 
 @st.cache(allow_output_mutation=True)
-def search_docs(index: VectorStore, query: str) -> List[Document]:
+def search_docs(index: vectorstores, query: str) -> List[Document]:
     """Searches a FAISS index for similar chunks to the query
     and returns a list of Documents."""
 
     # Search for similar chunks
-    docs = index.similarity_search(query, k=5)
-    return docs
+    print(f"=====pre-index:{index}=====")
+    print(f"=====pre-query:{query}=====")
+    # docs = index.similarity_search(query, k=5)
+    print(f"=====post-index:{index}=====")
+    print(f"=====post-query:{query}=====")
+    return "#######################################"
+    # return docs
 
 
 @st.cache(allow_output_mutation=True)
@@ -120,12 +134,26 @@ def get_answer(docs: List[Document], query: str) -> Dict[str, Any]:
     # Get the answer
 
     chain = load_qa_with_sources_chain(
-        OpenAI(
-            temperature=0, openai_api_key=st.session_state.get("OPENAI_API_KEY")
+        AzureChatOpenAI(
+            temperature=0, 
+            openai_api_key=st.session_state.get("AZURE_OPENAI_API_KEY"),
+            azure_endpoint=st.session_state.get("AZURE_OPENAI_ENDPOINT"),
+            openai_api_version=st.session_state.get("OPENAI_API_VERSION"),
+            model=st.session_state.get("MODEL_ENGINE_35"),
         ),  # type: ignore
         chain_type="stuff",
         prompt=STUFF_PROMPT,
     )
+    llm = AzureChatOpenAI(
+        
+    )
+    # chain = load_qa_with_sources_chain(
+    #     OpenAI(
+    #         temperature=0, openai_api_key=st.session_state.get("OPENAI_API_KEY")
+    #     ),  # type: ignore
+    #     chain_type="stuff",
+    #     prompt=STUFF_PROMPT,
+    # )
 
     # Cohere doesn't work very well as of now.
     # chain = load_qa_with_sources_chain(
