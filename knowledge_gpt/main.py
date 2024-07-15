@@ -1,5 +1,5 @@
 import sys
-sys.path.append('D:/NNIT/ZZZ/DocDAAS-main')
+sys.path.append('/home/adminsiyu/code/DocDAAS')
 
 import streamlit as st
 from PIL import Image
