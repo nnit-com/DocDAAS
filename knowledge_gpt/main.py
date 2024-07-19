@@ -87,17 +87,14 @@ if button or st.session_state.get("submit"):
         # Output Columns
         answer_col, sources_col = st.columns(2)
         sources = search_docs(index, query)
-
         try:
             answer = get_answer(sources, query)
             if not show_all_chunks:
                 # Get the sources for the answer
                 sources = get_sources(answer, sources)
-
             with answer_col:
                 st.markdown("#### Answer")
                 st.markdown(answer["output_text"].split("SOURCES: ")[0])
-
             with sources_col:
                 st.markdown("#### Sources")
                 for source in sources:
