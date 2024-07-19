@@ -1,4 +1,6 @@
 # __init__.py  
+import sys
+sys.path.append('/home/adminsiyu/code/DocDAAS01')
 import streamlit as st  
 from knowledge_gpt.components import main_app, sidebar, uploader  
 from knowledge_gpt.utils import page_config  
