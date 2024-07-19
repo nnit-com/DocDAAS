@@ -92,9 +92,11 @@ if button or st.session_state.get("submit"):
             if not show_all_chunks:
                 # Get the sources for the answer
                 sources = get_sources(answer, sources)
+
             with answer_col:
                 st.markdown("#### Answer")
                 st.markdown(answer["output_text"].split("SOURCES: ")[0])
+
             with sources_col:
                 st.markdown("#### Sources")
                 for source in sources:
@@ -104,20 +106,6 @@ if button or st.session_state.get("submit"):
 
         except OpenAIError as e:
             st.error(e._message)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # Load the images
 # image1 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/wechatqrcode_kyle.png")
