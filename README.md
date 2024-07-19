@@ -26,15 +26,20 @@ pip install poetry -i https://pypi.mirrors.ustc.edu.cn/simple
 
 
 
-```bash
-poetry install
-poetry shell
-```
+~~ ```bash ~~
+~~ poetry install~~ 
+~~ poetry shell~~ 
+~~ ```~~ 
 
 3. Run the Streamlit server🚀
 
+激活conda环境 
 ```bash
-cd DocDAAS
+conda activate DocDAAS-py310
+```
+
+```bash
+cd /home/adminsiyu/code/DocDAAS/knowledge_gpt/
 streamlit run main.py
 ```
 
