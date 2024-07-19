@@ -87,6 +87,7 @@ if button or st.session_state.get("submit"):
         # Output Columns
         answer_col, sources_col = st.columns(2)
         sources = search_docs(index, query)
+
         try:
             answer = get_answer(sources, query)
             if not show_all_chunks:
@@ -107,29 +108,30 @@ if button or st.session_state.get("submit"):
         except OpenAIError as e:
             st.error(e._message)
 
+
 # Load the images
-# image1 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/wechatqrcode_kyle.png")
-# image2 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/zhifubaoqrcode_kyle.png")
-# image3 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/zhifubaoqrcode_kyle.png")
+image1 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/wechatqrcode_kyle.png")
+image2 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/zhifubaoqrcode_kyle.png")
+image3 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/zhifubaoqrcode_kyle.png")
 
 # Display the image with text on top
-# st.write("Each document costs about $1 for OpenAI API call. Please consider pay to keep this service alive! Thank you!")
-# st.write("每篇文章调用OpenAI API的费用约为¥7人民币，请帮助支付以便我能够一直提供这个AI小程序，谢谢您！")
+st.write("Each document costs about $1 for OpenAI API call. Please consider pay to keep this service alive! Thank you!")
+st.write("每篇文章调用OpenAI API的费用约为¥7人民币，请帮助支付以便我能够一直提供这个AI小程序，谢谢您！")
 #st.image(img, caption=None, width=200)
 
-# # Divide the app page into two columns
-# col1, col2, col3 = st.columns(3)
+# Divide the app page into two columns
+col1, col2, col3 = st.columns(3)
 
-# # Display the first image in the first column
-# with col1:
-#     st.image(image1, caption="WeChat", width=200)
+# Display the first image in the first column
+with col1:
+    st.image(image1, caption="WeChat", width=200)
 
-# # Display the second image in the second column
-# with col2:
-#     st.image(image2, caption="****", width=200)
+# Display the second image in the second column
+with col2:
+    st.image(image2, caption="****", width=200)
 
-# # Display the third image in the third column
-# with col3:
-#     st.image(image3, caption="PayPal", width=200)
+# Display the third image in the third column
+with col3:
+    st.image(image3, caption="PayPal", width=200)
 
 
