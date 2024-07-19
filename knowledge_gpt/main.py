@@ -1,5 +1,5 @@
 import sys
-sys.path.append('D:/NNIT/ZZZ/DocDAAS-main')
+sys.path.append('/home/adminsiyu/code/DocDAAS')
 
 import streamlit as st
 from PIL import Image
@@ -110,9 +110,9 @@ if button or st.session_state.get("submit"):
 
 
 # Load the images
-image1 = Image.open(r"D:\NNIT\ZZZ\DocDAAS-main\knowledge_gpt\wechatqrcode_kyle.png")
-image2 = Image.open(r"D:\NNIT\ZZZ\DocDAAS-main\knowledge_gpt\zhifubaoqrcode_kyle.png")
-image3 = Image.open(r"D:\NNIT\ZZZ\DocDAAS-main\knowledge_gpt\zhifubaoqrcode_kyle.png")
+image1 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/wechatqrcode_kyle.png")
+image2 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/zhifubaoqrcode_kyle.png")
+image3 = Image.open("/home/adminsiyu/code/DocDAAS/knowledge_gpt/zhifubaoqrcode_kyle.png")
 
 # Display the image with text on top
 st.write("Each document costs about $1 for OpenAI API call. Please consider pay to keep this service alive! Thank you!")
