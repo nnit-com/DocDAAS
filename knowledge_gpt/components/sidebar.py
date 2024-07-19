@@ -3,9 +3,12 @@ import streamlit as st
 from knowledge_gpt.components.faq import faq
 
 
-def set_openai_api_key(api_key: str):
-    st.session_state["OPENAI_API_KEY"] = api_key
-
+def set_openai__key():
+    st.session_state["AZURE_OPENAI_API_KEY"] = "e111e1b9b44641a880e5331a4617354d"
+    st.session_state["AZURE_OPENAI_ENDPOINT"] = "https://nnitkitn.openai.azure.com/"
+    st.session_state["MODEL_ENGINE_35"] = "OpenAITest01"
+    st.session_state["OPENAI_API_VERSION"] = "2023-09-01-preview"
+    st.session_state["MODEL_NAME_EMDEDDING_ADA2"] = "NNIT-Ada2-tst1"
 
 def sidebar():
     with st.sidebar:
@@ -26,8 +29,9 @@ def sidebar():
 
 #        if api_key_input:
 #            set_openai_api_key(api_key_input)
-        set_openai_api_key(st.secrets["OPENAI_API_KEY"])
-        
+#         set_openai_api_key(st.secrets["OPENAI_API_KEY"])
+        set_openai__key()
+
         st.markdown("---")
         st.markdown("# About")
         st.markdown(
