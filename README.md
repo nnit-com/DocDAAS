@@ -29,7 +29,7 @@ pip install -r requirements.txt
 3. Run the Streamlit server🚀
 
 ```bash
-cd DocDAAS/knowledge_gpt/
+cd knowledge_gpt
 streamlit run main.py
 ```
 
