@@ -38,6 +38,11 @@ cd DocDAAS
 streamlit run main.py
 ```
 
+```bash
+git add . && git commit -m"update readme" && git push 
+
+```
+
 ## 🚀 Upcoming Features
 
 - Add support for more formats (e.g. webpages 🕸️, PPTX 📊, etc.)

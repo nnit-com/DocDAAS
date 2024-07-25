@@ -24,6 +24,8 @@ cd DocDAAS
 pip install poetry -i https://pypi.mirrors.ustc.edu.cn/simple
 
 
+pip install -r requirements.txt
+
 
 
 ```bash
@@ -44,3 +46,9 @@ streamlit run main.py
 - Highlight relevant phrases in citations 🔦
 - Support scanned documents with OCR 📝
 - More customization options (e.g. chain type 🔗, chunk size📏, etc.)
+
+
+conda activate DocDAAS-py310
+streamlit run main.py
+git reset HEAD
+cd /home/adminsiyu/code/DocDAAS01/knowledge_gpt
