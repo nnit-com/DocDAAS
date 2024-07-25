@@ -18,28 +18,18 @@ git clone https://github.com/nnit-com/DocDAAS
 cd DocDAAS
 ```
 
-2. Install dependencies with [Poetry](https://python-poetry.org/) and activate virtual environment🔨
+2. Install dependencies with [Conda](https://conda.io/projects/conda/en/latest/user-guide/getting-started.html) and activate virtual environment🔨
 
-
-pip install poetry -i https://pypi.mirrors.ustc.edu.cn/simple
-
-
-
-
-~~ ```bash ~~
-~~ poetry install~~ 
-~~ poetry shell~~ 
-~~ ```~~ 
+```bash
+conda create --name DocDAAS-py310 python=3.10
+conda activate DocDAAS-py310
+pip install -r requirements.txt
+```
 
 3. Run the Streamlit server🚀
 
-激活conda环境 
 ```bash
-conda activate DocDAAS-py310
-```
-
-```bash
-cd /home/adminsiyu/code/DocDAAS/knowledge_gpt/
+cd DocDAAS/knowledge_gpt/
 streamlit run main.py
 ```
 
