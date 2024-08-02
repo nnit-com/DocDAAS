@@ -1,5 +1,3 @@
-
-
 # components/sidebar.py  
 import streamlit as st  
   
